@@ -1,7 +1,18 @@
 import networkx as nx
 import graphviz
 from itertools import combinations, chain
-from collections import Iterable
+from collections.abc import Iterable
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+
+def do_plot(dot):
+    # Assuming 'dot' is the graphviz.Digraph object from the previous example
+    dot.render('___', format='png')
+    img = mpimg.imread('___.png')
+    plt.imshow(img)
+    plt.axis('off')  # Hide axes
+    plt.show()
+
 
 
 class CausalGraphicalModel:
@@ -87,6 +98,7 @@ class CausalGraphicalModel:
             dot.edge(n, a, _attributes={"style": "dashed"})
             dot.edge(n, b, _attributes={"style": "dashed"})
 
+        do_plot(dot)
         return dot
 
     def get_distribution(self):
@@ -219,7 +231,7 @@ class CausalGraphicalModel:
         estimating the causal impact of x on y via the backdoor
         adjustment formula:
 
-        P(y|do(x)) = \sum_{z}P(y|x,z)P(z)
+        P(y|do(x)) = sum_{z}P(y|x,z)P(z)
 
         Arguments
         ---------
@@ -260,10 +272,10 @@ class CausalGraphicalModel:
     def get_all_backdoor_adjustment_sets(self, x, y):
         """
         Get all sets of variables which are valid adjustment sets for
-        estimating the causal impact of x on y via the back door 
+        estimating the causal impact of x on y via the back door
         adjustment formula:
 
-        P(y|do(x)) = \sum_{z}P(y|x,z)P(z)
+        P(y|do(x)) = sum_{z}P(y|x,z)P(z)
 
         Note that the empty set can be a valid adjustment set for some CGMs,
         in this case frozenset(frozenset(), ...) is returned. This is different
@@ -272,8 +284,8 @@ class CausalGraphicalModel:
 
         Arguments
         ---------
-        x: str 
-            Intervention Variable 
+        x: str
+            Intervention Variable
         y: str
             Target Variable
 
@@ -304,7 +316,7 @@ class CausalGraphicalModel:
         estimating the causal impact of x on y via the frontdoor
         adjustment formula:
 
-        P(y|do(x)) = \sum_{z}P(z|x)\sum_{x'}P(y|x',z)P(x')
+        P(y|do(x)) = sum_{z}P(z|x) sum_{x'}P(y|x',z)P(x')
 
         Arguments
         ---------
@@ -356,7 +368,7 @@ class CausalGraphicalModel:
         estimating the causal impact of x on y via the frontdoor adjustment
         formula:
 
-        P(y|do(x)) = \sum_{z}P(z|x)\sum_{x'}P(y|x',z)P(x')
+        P(y|do(x)) = sum_{z}P(z|x) sum_{x'}P(y|x',z)P(x')
 
         Note that the empty set can be a valid adjustment set for some CGMs,
         in this case frozenset(frozenset(), ...) is returned. This is different
